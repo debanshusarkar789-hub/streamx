@@ -18,9 +18,11 @@ export default async function TvWatchPage({ params }: Props) {
   if (!show) notFound();
 
   let episodeTitle = `S${season}:E${episode}`;
+  let episodes: any[] = [];
   try {
     const seasonData = await getTvSeasonEpisodes(id, season);
-    const ep = seasonData.episodes?.find((e) => e.episode_number === episode);
+    episodes = seasonData.episodes || [];
+    const ep = episodes.find((e) => e.episode_number === episode);
     if (ep) episodeTitle = ep.name;
   } catch {}
 
@@ -36,6 +38,20 @@ export default async function TvWatchPage({ params }: Props) {
       showId={show.id}
       season={season}
       episode={episode}
+      seasons={show.seasons?.filter((s) => s.season_number > 0).map((s) => ({
+        seasonNumber: s.season_number,
+        name: s.name,
+        episodeCount: s.episode_count,
+        posterPath: s.poster_path,
+      })) || []}
+      currentSeasonEpisodes={episodes.map((e) => ({
+        episodeNumber: e.episode_number,
+        name: e.name,
+        overview: e.overview,
+        stillPath: e.still_path,
+        airDate: e.air_date || "",
+        voteAverage: e.vote_average || 0,
+      }))}
     />
   );
 }

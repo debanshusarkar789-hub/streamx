@@ -1,0 +1,8 @@
+<svg width="300" height="450" viewBox="0 0 300 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="450" fill="#1a1a2e"/>
+  <path d="M150 200C165 200 180 215 180 230C180 245 165 260 150 260C135 260 120 245 120 230C120 215 135 200 150 200Z" fill="#333"/>
+  <path d="M100 320C100 280 125 260 150 260C175 260 200 280 200 320" fill="#333"/>
+  <line x1="150" y1="170" x2="150" y2="190" stroke="#444" stroke-width="2"/>
+  <line x1="170" y1="230" x2="150" y2="230" stroke="#444" stroke-width="2"/>
+  <text x="150" y="370" text-anchor="middle" fill="#555" font-size="14" font-family="sans-serif">No Poster</text>
+</svg>

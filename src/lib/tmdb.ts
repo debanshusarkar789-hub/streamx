@@ -3,20 +3,54 @@ import type { TMDBResponse, Movie, MovieDetails, ProviderResult } from "./types"
 const TMDB_IMG = "https://image.tmdb.org/t/p";
 const TMDB_API = "https://api.themoviedb.org/3";
 
+function getProxyBase(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
+}
+
 async function tmdbFetch<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
-  const url = new URL(`${TMDB_API}${endpoint}`);
-  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-  url.searchParams.set("language", "en-US");
-  try {
-    const res = await fetch(url.toString(), {
-      headers: { Authorization: `Bearer ${process.env.TMDB_TOKEN}`, Accept: "application/json" },
-      next: { revalidate: 300 },
-    });
-    if (!res.ok) throw new Error(`TMDB error: ${res.status}`);
-    return res.json();
-  } catch {
-    return { results: [], page: 1, total_pages: 0, total_results: 0 } as T;
+  const token = process.env.TMDB_TOKEN;
+
+  // Try 1: Direct TMDB API call (works on Vercel, Cloudflare, etc.)
+  if (token) {
+    try {
+      const url = new URL(`${TMDB_API}${endpoint}`);
+      Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+      url.searchParams.set("language", "en-US");
+      const res = await fetch(url.toString(), {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+        cache: "no-store",
+      });
+      if (res.ok) return res.json();
+    } catch {}
   }
+
+  // Try 2: API proxy route (works when direct fetch fails)
+  try {
+    const url = new URL(`${getProxyBase()}/api/tmdb${endpoint}`);
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+    const res = await fetch(url.toString(), { cache: "no-store" });
+    if (res.ok) return res.json();
+  } catch {}
+
+  // Try 3: Child process fallback (local Windows dev)
+  try {
+    const { execFileSync } = await import("child_process");
+    const path = await import("path");
+    const url = new URL(`${TMDB_API}${endpoint}`);
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+    url.searchParams.set("language", "en-US");
+    const scriptPath = path.join(process.cwd(), "scripts", "fetch-tmdb.cjs");
+    const data = execFileSync(
+      process.execPath,
+      [scriptPath, url.toString(), token || ""],
+      { timeout: 20000, encoding: "utf-8", maxBuffer: 10 * 1024 * 1024, env: { ...process.env, NODE_TLS_REJECT_UNAUTHORIZED: "" } }
+    );
+    return JSON.parse(data);
+  } catch {}
+
+  return { results: [], page: 1, total_pages: 0, total_results: 0 } as T;
 }
 
 export function imgUrl(path: string | null, size = "w500"): string {

@@ -39,7 +39,8 @@ export default function Header() {
 
           <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
             <Link href="/" className="text-white hover:text-zinc-300 transition">Home</Link>
-            <Link href="/?category=popular" className="text-zinc-400 hover:text-white transition">Popular</Link>
+            <Link href="/?category=popular" className="text-zinc-400 hover:text-white transition">Movies</Link>
+            <Link href="/?category=tv" className="text-zinc-400 hover:text-white transition">TV Shows</Link>
             <Link href="/?category=top_rated" className="text-zinc-400 hover:text-white transition">Top Rated</Link>
             <Link href="/?category=upcoming" className="text-zinc-400 hover:text-white transition">Upcoming</Link>
           </nav>

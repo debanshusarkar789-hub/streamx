@@ -1,9 +1,11 @@
 import Link from "next/link";
 import MovieCard from "@/components/MovieCard";
 import MovieGrid from "@/components/MovieGrid";
+import TvCard from "@/components/TvCard";
+import TvGrid from "@/components/TvGrid";
 import ProviderRow from "@/components/ProviderRow";
 import ContinueWatchingRow from "@/components/ContinueWatchingRow";
-import { getTrending, getPopular, getNowPlaying, getTopRated, getUpcoming, getWatchProviders, backdropUrl } from "@/lib/tmdb";
+import { getTrending, getPopular, getNowPlaying, getTopRated, getUpcoming, getWatchProviders, backdropUrl, getTrendingTv, getPopularTv, getOnTheAir, getTopRatedTv } from "@/lib/tmdb";
 
 interface Props {
   searchParams: Promise<{ category?: string }>;
@@ -51,12 +53,27 @@ export default async function Home({ searchParams }: Props) {
       </div>
     );
   }
+  if (category === "tv") {
+    const [trendingTv, popularTv, onTheAir] = await Promise.all([
+      getTrendingTv(), getPopularTv(), getOnTheAir(),
+    ]);
+    return (
+      <div className="pt-24 pb-12 px-4 md:px-12 max-w-7xl mx-auto space-y-10">
+        <h1 className="text-3xl font-bold text-white mb-4">TV Shows</h1>
+        <TvGrid title="Trending TV" shows={trendingTv.results.slice(0, 18)} />
+        <TvGrid title="Popular Series" shows={popularTv.results.slice(0, 18)} />
+        <TvGrid title="On The Air" shows={onTheAir.results.slice(0, 18)} />
+      </div>
+    );
+  }
 
-  const [trending, nowPlaying, popular, providersData] = await Promise.all([
+  const [trending, nowPlaying, popular, providersData, trendingTv, popularTv] = await Promise.all([
     getTrending(),
     getNowPlaying(),
     getPopular(),
     getWatchProviders(),
+    getTrendingTv(),
+    getPopularTv(),
   ]);
 
   const providers = providersData?.results?.filter((p) => p.display_priority <= 30)?.slice(0, 18) || [];
@@ -158,6 +175,20 @@ export default async function Home({ searchParams }: Props) {
             title="Popular on StreamX"
             movies={popular.results.slice(0, 18)}
             link="/?category=popular"
+          />
+        </div>
+        <div className="px-4 md:px-12">
+          <TvGrid
+            title="Trending TV Shows"
+            shows={trendingTv.results.slice(0, 18)}
+            link="/?category=tv"
+          />
+        </div>
+        <div className="px-4 md:px-12">
+          <TvGrid
+            title="Popular Series"
+            shows={popularTv.results.slice(0, 18)}
+            link="/?category=tv"
           />
         </div>
       </div>

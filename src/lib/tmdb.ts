@@ -1,4 +1,4 @@
-import type { TMDBResponse, Movie, MovieDetails, ProviderResult } from "./types";
+import type { TMDBResponse, Movie, MovieDetails, ProviderResult, TvShow, TvDetails, Episode } from "./types";
 
 const TMDB_IMG = "https://image.tmdb.org/t/p";
 const TMDB_API = "https://api.themoviedb.org/3";
@@ -103,4 +103,40 @@ export function getMoviesByProvider(providerId: number, page = 1) {
     sort_by: "popularity.desc",
     page: String(page),
   });
+}
+
+// ---- TV Shows ----
+
+export function getTrendingTv(page = 1) {
+  return tmdbFetch<TMDBResponse<TvShow>>("/trending/tv/week", { page: String(page) });
+}
+
+export function getPopularTv(page = 1) {
+  return tmdbFetch<TMDBResponse<TvShow>>("/tv/popular", { page: String(page) });
+}
+
+export function getTopRatedTv(page = 1) {
+  return tmdbFetch<TMDBResponse<TvShow>>("/tv/top_rated", { page: String(page) });
+}
+
+export function getOnTheAir(page = 1) {
+  return tmdbFetch<TMDBResponse<TvShow>>("/tv/on_the_air", { page: String(page) });
+}
+
+export function getAiringToday(page = 1) {
+  return tmdbFetch<TMDBResponse<TvShow>>("/tv/airing_today", { page: String(page) });
+}
+
+export function getTvShow(id: number) {
+  return tmdbFetch<TvDetails>(`/tv/${id}`, {
+    append_to_response: "credits,videos,watch/providers",
+  });
+}
+
+export function getTvSeasonEpisodes(tvId: number, seasonNumber: number) {
+  return tmdbFetch<{ episodes: Episode[] }>(`/tv/${tvId}/season/${seasonNumber}`);
+}
+
+export function searchTv(query: string, page = 1) {
+  return tmdbFetch<TMDBResponse<TvShow>>("/search/tv", { query, page: String(page) });
 }

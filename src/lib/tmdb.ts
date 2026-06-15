@@ -1,7 +1,9 @@
 import type { TMDBResponse, Movie, MovieDetails, ProviderResult } from "./types";
 
 const TMDB_IMG = "https://image.tmdb.org/t/p";
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL
+  || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null)
+  || "http://localhost:3000";
 
 async function tmdbFetch<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
   const url = new URL(`${API_BASE}/api/tmdb${endpoint}`);

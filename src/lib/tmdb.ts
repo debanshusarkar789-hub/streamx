@@ -1,20 +1,18 @@
 import type { TMDBResponse, Movie, MovieDetails, ProviderResult } from "./types";
 
 const TMDB_IMG = "https://image.tmdb.org/t/p";
-const API_BASE = process.env.NEXT_PUBLIC_API_URL
-  || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null)
-  || "http://localhost:3000";
+const TMDB_API = "https://api.themoviedb.org/3";
 
 async function tmdbFetch<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
-  const url = new URL(`${API_BASE}/api/tmdb${endpoint}`);
+  const url = new URL(`${TMDB_API}${endpoint}`);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  url.searchParams.set("language", "en-US");
   try {
-    const res = await fetch(url.toString(), { next: { revalidate: 300 } });
-    if (!res.ok) {
-      const body = await res.text();
-      if (res.status === 502) throw new Error(body);
-      throw new Error(`TMDB error: ${res.status}`);
-    }
+    const res = await fetch(url.toString(), {
+      headers: { Authorization: `Bearer ${process.env.TMDB_TOKEN}`, Accept: "application/json" },
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) throw new Error(`TMDB error: ${res.status}`);
     return res.json();
   } catch {
     return { results: [], page: 1, total_pages: 0, total_results: 0 } as T;

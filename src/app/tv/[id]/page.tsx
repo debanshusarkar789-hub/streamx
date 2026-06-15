@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTvShow, imgUrl, backdropUrl } from "@/lib/tmdb";
 import ProviderBadge from "@/components/ProviderBadge";
+import TvEpisodeBrowser from "@/components/TvEpisodeBrowser";
 import type { TvDetails } from "@/lib/types";
 
 interface Props {
@@ -66,20 +67,18 @@ export default async function TvPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Seasons */}
+      {/* Episodes Browser */}
       <section className="px-4 md:px-12 py-8">
-        <h2 className="text-xl md:text-2xl font-bold text-white mb-5">Seasons</h2>
-        <div className="flex gap-4 overflow-x-auto pb-2">
-          {show.seasons?.filter((s) => s.season_number > 0).map((s) => (
-            <Link key={s.id} href={`/watch/tv/${show.id}/${s.season_number}/1`} className="shrink-0 w-36 md:w-40 group">
-              <div className="aspect-[2/3] rounded-lg overflow-hidden bg-zinc-900 ring-1 ring-white/10 group-hover:ring-red-500/50 transition-all group-hover:scale-105 duration-200">
-                <img src={imgUrl(s.poster_path, "w342")} alt={s.name} className="w-full h-full object-cover" loading="lazy" />
-              </div>
-              <p className="text-xs text-zinc-400 mt-1.5 truncate group-hover:text-white transition-colors font-medium">{s.name}</p>
-              <p className="text-[11px] text-zinc-600">{s.episode_count} episodes{s.air_date ? ` · ${s.air_date.split("-")[0]}` : ""}</p>
-            </Link>
-          ))}
-        </div>
+        <TvEpisodeBrowser
+          showId={show.id}
+          seasons={show.seasons?.filter((s) => s.season_number > 0).map((s) => ({
+            season_number: s.season_number,
+            name: s.name,
+            episode_count: s.episode_count,
+            poster_path: s.poster_path,
+          })) || []}
+          initialSeason={1}
+        />
       </section>
 
       {/* Cast */}

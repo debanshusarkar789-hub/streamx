@@ -150,12 +150,17 @@ export default function WatchClient({ movieTitle, backdropSrc, posterSrc, nhdUrl
 
           {/* Bottom Action Bar */}
           <div className="flex items-center justify-center gap-8 py-4 px-4 border-t border-white/5 mt-3">
-            <button className="flex items-center gap-2 text-white/70 hover:text-white transition text-sm">
+            <a
+              href={`https://vidvault.ru/movie/${movieId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition text-sm font-medium"
+            >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              Add to Watchlist
-            </button>
+              Download
+            </a>
           </div>
         </div>
       </div>

@@ -150,16 +150,26 @@ export default function TvWatchClient({ showName, episodeTitle, backdropSrc, pos
               </div>
             )}
           </div>
-          {/* Episode selector button */}
-          <button onClick={() => setPickerOpen(true)} className="flex items-center justify-center gap-2 py-3 px-4 border-t border-white/5 mt-2 text-zinc-400 hover:text-white transition text-sm shrink-0">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
-            Episodes
-            <span className="text-zinc-600">·</span>
-            <span className="text-zinc-500">S{season}</span>
-            <span className="text-zinc-600">·</span>
-            <span className="text-zinc-500">{episodes.length} episodes</span>
-            <svg className="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
-          </button>
+          {/* Bottom bar */}
+          <div className="flex items-center justify-between px-4 py-3 border-t border-white/5 mt-2 shrink-0">
+            <button onClick={() => setPickerOpen(true)} className="flex items-center gap-2 text-zinc-400 hover:text-white transition text-sm">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
+              Episodes
+              <span className="text-zinc-600">·</span>
+              S{season} · {episodes.length} eps
+            </button>
+            <a
+              href={`https://vidvault.ru/tv/${showId}/${season}/${episode}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition text-sm font-medium"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Download
+            </a>
+          </div>
         </div>
       </div>
 

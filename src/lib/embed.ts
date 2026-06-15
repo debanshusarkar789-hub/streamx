@@ -93,6 +93,16 @@ export function getTvDownloadUrl(tmdbId: number, season: number, episode: number
   return `https://nhdapi.com/dl/tv/${tmdbId}/${season}/${episode}`;
 }
 
+// ---- VidVault Download ----
+
+export function getVidVaultMovieUrl(movieId: number): string {
+  return `https://vidvault.ru/movie/${movieId}`;
+}
+
+export function getVidVaultTvUrl(tmdbId: number, season: number, episode: number): string {
+  return `https://vidvault.ru/tv/${tmdbId}/${season}/${episode}`;
+}
+
 // ---- Vixsrc ----
 
 export function getVixsrcMovieUrl(movieId: number): string {

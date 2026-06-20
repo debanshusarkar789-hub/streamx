@@ -6,6 +6,7 @@ import TvCard from "@/components/TvCard";
 import TvGrid from "@/components/TvGrid";
 import ProviderRow from "@/components/ProviderRow";
 import ContinueWatchingRow from "@/components/ContinueWatchingRow";
+import DomainNotice from "@/components/DomainNotice";
 import { getTrending, getPopular, getNowPlaying, getTopRated, getUpcoming, getWatchProviders, backdropUrl, getTrendingTv, getPopularTv, getOnTheAir, getTopRatedTv } from "@/lib/tmdb";
 
 export const runtime = "edge";
@@ -154,6 +155,8 @@ export default async function Home({ searchParams }: Props) {
       <div className="relative z-10 px-4 md:px-12 pb-2">
         <ProviderRow providers={providers} link="/provider" />
       </div>
+
+      <DomainNotice />
 
       {/* Continue Watching */}
       <div className="relative z-10 px-4 md:px-12 pb-2">

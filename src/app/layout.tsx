@@ -44,8 +44,8 @@ export default function RootLayout({
       <body className="bg-black text-zinc-100 min-h-screen flex flex-col antialiased" suppressHydrationWarning>
         <SplashScreen />
         <Header />
-        <DomainNotice />
         <main className="flex-1 pb-16 md:pb-0">{children}</main>
+        <DomainNotice />
         <footer className="border-t border-zinc-900 py-8 px-4 hidden md:block">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">

@@ -23,7 +23,7 @@ export default function DomainNotice() {
   if (dismissed) return null;
 
   return (
-    <div className="bg-yellow-600/90 text-black text-center text-xs py-2 px-4 flex items-center justify-center gap-3">
+    <div className="bg-zinc-900 border-y border-zinc-800 text-zinc-400 text-center text-xs py-2 px-4 flex items-center justify-center gap-3">
       <span>
         Having issues? Try{" "}
         <a

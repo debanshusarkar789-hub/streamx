@@ -45,8 +45,8 @@ interface Server {
 }
 
 const servers: Server[] = [
-  { name: "NHD", url: "", badge: "NHD" },
   { name: "Vixsrc", url: "", badge: "VX" },
+  { name: "NHD", url: "", badge: "NHD" },
   { name: "VidFast", url: "", badge: "VF" },
 ];
 

@@ -39,8 +39,8 @@ export default function WatchClient({ movieTitle, backdropSrc, posterSrc, poster
   }, [movieId, movieTitle, posterPath, backdropSrc]);
 
   const servers: Server[] = [
-    { name: "NHD", url: nhdUrl, badge: "NHD" },
     { name: "Vixsrc", url: vixsrcUrl, badge: "VX" },
+    { name: "NHD", url: nhdUrl, badge: "NHD" },
     { name: "VidFast", url: vidfastUrl, badge: "VF" },
   ];
 

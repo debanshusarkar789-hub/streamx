@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function SplashScreen() {
   const [show, setShow] = useState(true);
@@ -26,11 +27,7 @@ export default function SplashScreen() {
     <div
       className={`fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-black transition-opacity duration-500 ${fade ? "opacity-0 pointer-events-none" : "opacity-100"}`}
     >
-      <img src="/logo.png" alt="StreamX" className="w-24 h-24 md:w-32 md:h-32 object-contain animate-pulse" />
-      <h1 className="text-3xl md:text-4xl font-cinzel font-bold text-red-600 mt-6 tracking-widest animate-pulse">
-        STREAMX
-      </h1>
-      <p className="text-zinc-600 text-xs mt-4 tracking-[0.3em] uppercase">Loading...</p>
+      <Image src="/logo.png" alt="StreamX" width={128} height={128} className="w-24 h-24 md:w-32 md:h-32 object-contain animate-pulse" priority />
     </div>
   );
 }

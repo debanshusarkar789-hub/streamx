@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { imgUrl } from "@/lib/tmdb";
 import type { ProviderResult } from "@/lib/types";
 
@@ -30,9 +31,11 @@ export default function ProviderRow({ providers, link }: Props) {
             title={p.provider_name}
           >
             <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden bg-white/5 ring-2 ring-white/10 group-hover:ring-red-500/50 transition-all duration-200 group-hover:scale-110">
-              <img
+              <Image
                 src={imgUrl(p.logo_path, "w185")}
                 alt={p.provider_name}
+                width={80}
+                height={80}
                 className="w-full h-full object-cover"
               />
             </div>

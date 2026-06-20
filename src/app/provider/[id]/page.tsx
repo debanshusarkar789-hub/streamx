@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import MovieCard from "@/components/MovieCard";
 import { getMoviesByProvider, getWatchProviders, imgUrl } from "@/lib/tmdb";
 
@@ -35,9 +36,11 @@ export default async function ProviderPage({ params, searchParams }: Props) {
     <div className="pt-24 pb-12 px-4 md:px-12 max-w-7xl mx-auto">
       <div className="flex items-center gap-4 mb-8">
         {provider && (
-          <img
+          <Image
             src={imgUrl(provider.logo_path, "w185")}
             alt={providerName}
+            width={48}
+            height={48}
             className="w-12 h-12 rounded-xl object-cover"
           />
         )}

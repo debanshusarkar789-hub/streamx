@@ -32,6 +32,7 @@ export default async function TvWatchPage({ params }: Props) {
       episodeTitle={episodeTitle}
       backdropSrc={backdropUrl(show.backdrop_path || show.poster_path)}
       posterSrc={imgUrl(show.poster_path)}
+      posterPath={show.poster_path}
       nhdUrl={getTvEmbedUrl(show.id, season, episode)}
       vixsrcUrl={getVixsrcTvUrl(show.id, season, episode)}
       vidfastUrl={getVidfastTvUrl(show.id, season, episode)}

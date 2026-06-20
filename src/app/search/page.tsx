@@ -95,7 +95,8 @@ export default async function SearchPage({ searchParams }: Props) {
           )}
 
           {/* Pagination */}
-          {(movieData.total_pages > 1 || tvData.total_pages > 1) && (
+          {(currentType !== "movie" ? tvData.total_pages > 1 : false) ||
+           (currentType !== "tv" ? movieData.total_pages > 1 : false) && (
             <div className="flex justify-center items-center gap-4 mt-12">
               {pageNum > 1 && (
                 <a href={`/search?q=${q}&type=${currentType}&page=${pageNum - 1}`} className="px-5 py-2.5 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-300 hover:bg-zinc-800 hover:text-white transition font-medium text-sm">
@@ -103,7 +104,8 @@ export default async function SearchPage({ searchParams }: Props) {
                 </a>
               )}
               <span className="text-zinc-500 text-sm">Page {pageNum}</span>
-              {(movieData.results.length > 0 || tvData.results.length > 0) && (
+              {(currentType !== "movie" ? tvData.total_pages > pageNum : false) ||
+               (currentType !== "tv" ? movieData.total_pages > pageNum : false) && (
                 <a href={`/search?q=${q}&type=${currentType}&page=${pageNum + 1}`} className="px-5 py-2.5 bg-red-600 rounded-lg text-white hover:bg-red-700 transition font-medium text-sm">
                   Next &rarr;
                 </a>

@@ -1,8 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getMovie, imgUrl, backdropUrl } from "@/lib/tmdb";
 import { getMovieEmbedUrl, getVidVaultMovieUrl } from "@/lib/embed";
 import ProviderBadge from "@/components/ProviderBadge";
+import FavoriteButton from "@/components/FavoriteButton";
 import type { MovieDetails } from "@/lib/types";
 
 interface Props {
@@ -39,10 +41,13 @@ export default async function MoviePage({ params }: Props) {
       {/* Hero */}
       <section className="relative min-h-[80vh] flex items-end">
         <div className="absolute inset-0">
-          <img
+          <Image
             src={backdropUrl(movie.backdrop_path || movie.poster_path)}
             alt=""
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/40" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
@@ -51,9 +56,11 @@ export default async function MoviePage({ params }: Props) {
         <div className="relative z-10 w-full px-4 md:px-12 pb-16 md:pb-24">
           <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-end">
             <div className="hidden md:block w-56 lg:w-72 shrink-0 shadow-2xl shadow-black/60 rounded-lg overflow-hidden -mb-32">
-              <img
+              <Image
                 src={imgUrl(movie.poster_path)}
                 alt={movie.title}
+                width={288}
+                height={432}
                 className="w-full"
               />
             </div>
@@ -94,7 +101,7 @@ export default async function MoviePage({ params }: Props) {
                 {movie.overview}
               </p>
 
-              <div className="flex items-center gap-4 mt-8">
+              <div className="flex items-center gap-3 mt-8 flex-wrap">
                 <Link
                   href={`/watch/${movie.id}`}
                   className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-3 rounded transition-all duration-200 hover:scale-105 animate-pulse-glow"
@@ -104,6 +111,7 @@ export default async function MoviePage({ params }: Props) {
                   </svg>
                   Watch Now
                 </Link>
+                <FavoriteButton item={{ id: movie.id, title: movie.title, poster_path: movie.poster_path, media_type: "movie" }} />
                 {trailer && (
                   <a
                     href={`https://www.youtube.com/watch?v=${trailer.key}`}
@@ -163,9 +171,11 @@ export default async function MoviePage({ params }: Props) {
             {movie.credits.cast.slice(0, 15).map((person) => (
               <div key={person.id} className="shrink-0 w-24 md:w-28 text-center group">
                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden mx-auto ring-2 ring-white/10 group-hover:ring-red-500/50 transition-all">
-                  <img
+                  <Image
                     src={imgUrl(person.profile_path, "w185")}
                     alt={person.name}
+                    width={80}
+                    height={80}
                     className="w-full h-full object-cover"
                   />
                 </div>

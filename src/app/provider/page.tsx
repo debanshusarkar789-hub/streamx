@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getWatchProviders, imgUrl } from "@/lib/tmdb";
 
 export default async function AllProvidersPage() {
@@ -19,9 +20,11 @@ export default async function AllProvidersPage() {
             title={p.provider_name}
           >
             <div className="w-full aspect-square rounded-2xl overflow-hidden bg-white/5 ring-2 ring-white/10 group-hover:ring-red-500/50 transition-all duration-200 group-hover:scale-105">
-              <img
+              <Image
                 src={imgUrl(p.logo_path, "w185")}
                 alt={p.provider_name}
+                width={185}
+                height={185}
                 className="w-full h-full object-cover"
               />
             </div>

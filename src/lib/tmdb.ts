@@ -12,7 +12,6 @@ function getProxyBase(): string {
 async function tmdbFetch<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
   const token = process.env.TMDB_TOKEN;
 
-  // Try 1: Direct TMDB API call (works on Vercel, Cloudflare, etc.)
   if (token) {
     try {
       const url = new URL(`${TMDB_API}${endpoint}`);
@@ -20,34 +19,17 @@ async function tmdbFetch<T>(endpoint: string, params: Record<string, string> = {
       url.searchParams.set("language", "en-US");
       const res = await fetch(url.toString(), {
         headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
-        cache: "no-store",
+        next: { revalidate: 600 },
       });
       if (res.ok) return res.json();
     } catch {}
   }
 
-  // Try 2: API proxy route (works when direct fetch fails)
   try {
     const url = new URL(`${getProxyBase()}/api/tmdb${endpoint}`);
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-    const res = await fetch(url.toString(), { cache: "no-store" });
+    const res = await fetch(url.toString(), { next: { revalidate: 600 } });
     if (res.ok) return res.json();
-  } catch {}
-
-  // Try 3: Child process fallback (local Windows dev)
-  try {
-    const { execFileSync } = await import("child_process");
-    const path = await import("path");
-    const url = new URL(`${TMDB_API}${endpoint}`);
-    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-    url.searchParams.set("language", "en-US");
-    const scriptPath = path.join(process.cwd(), "scripts", "fetch-tmdb.cjs");
-    const data = execFileSync(
-      process.execPath,
-      [scriptPath, url.toString(), token || ""],
-      { timeout: 20000, encoding: "utf-8", maxBuffer: 10 * 1024 * 1024, env: { ...process.env, NODE_TLS_REJECT_UNAUTHORIZED: "" } }
-    );
-    return JSON.parse(data);
   } catch {}
 
   return { results: [], page: 1, total_pages: 0, total_results: 0 } as T;

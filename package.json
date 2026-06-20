@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "next": "16.2.9",
-    "node-fetch": "^3.3.2",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "sharp": "^0.35.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -1,12 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { addToContinueWatching } from "@/lib/continueWatching";
+import { useLandscapeLock } from "@/lib/useLandscapeLock";
 
 interface Props {
   movieTitle: string;
   backdropSrc: string;
   posterSrc: string;
+  posterPath: string | null;
   nhdUrl: string;
   vixsrcUrl: string;
   vidfastUrl: string;
@@ -19,19 +22,21 @@ interface Server {
   badge: string;
 }
 
-export default function WatchClient({ movieTitle, backdropSrc, posterSrc, nhdUrl, vixsrcUrl, vidfastUrl, movieId }: Props) {
+export default function WatchClient({ movieTitle, backdropSrc, posterSrc, posterPath, nhdUrl, vixsrcUrl, vidfastUrl, movieId }: Props) {
   const [showWarning, setShowWarning] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
+
+  useLandscapeLock();
 
   useEffect(() => {
     addToContinueWatching({
       id: movieId,
       title: movieTitle,
-      poster_path: posterSrc.split("/w500").pop() || null,
+      poster_path: posterPath,
       backdrop_path: backdropSrc.split("/original").pop() || null,
     });
-  }, [movieId, movieTitle, posterSrc, backdropSrc]);
+  }, [movieId, movieTitle, posterPath, backdropSrc]);
 
   const servers: Server[] = [
     { name: "NHD", url: nhdUrl, badge: "NHD" },
@@ -88,7 +93,7 @@ export default function WatchClient({ movieTitle, backdropSrc, posterSrc, nhdUrl
             <iframe key={current.url} src={current.url} className="w-full h-full" allowFullScreen allow="autoplay; fullscreen" onLoad={() => setLoaded(true)} />
             {!loaded && (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
-                <img src={posterSrc} alt={movieTitle} className="absolute inset-0 w-full h-full object-cover opacity-30" />
+                <Image src={posterSrc} alt={movieTitle} fill className="object-cover opacity-30" />
                 <div className="relative flex flex-col items-center gap-2">
                   <div className="w-7 h-7 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin" />
                   <span className="text-zinc-400 text-[11px]">Loading from {current.name}...</span>

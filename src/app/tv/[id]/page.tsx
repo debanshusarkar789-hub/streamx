@@ -1,8 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTvShow, imgUrl, backdropUrl } from "@/lib/tmdb";
 import ProviderBadge from "@/components/ProviderBadge";
 import TvEpisodeBrowser from "@/components/TvEpisodeBrowser";
+import FavoriteButton from "@/components/FavoriteButton";
 import type { TvDetails } from "@/lib/types";
 
 interface Props {
@@ -21,14 +23,14 @@ export default async function TvPage({ params }: Props) {
     <div className="bg-black">
       <section className="relative min-h-[80vh] flex items-end">
         <div className="absolute inset-0">
-          <img src={backdropUrl(show.backdrop_path || show.poster_path)} alt="" className="w-full h-full object-cover" />
+          <Image src={backdropUrl(show.backdrop_path || show.poster_path)} alt="" fill className="object-cover" priority sizes="100vw" />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/40" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
         </div>
         <div className="relative z-10 w-full px-4 md:px-12 pb-16 md:pb-24">
           <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-end">
             <div className="hidden md:block w-56 lg:w-72 shrink-0 shadow-2xl shadow-black/60 rounded-lg overflow-hidden -mb-32">
-              <img src={imgUrl(show.poster_path)} alt={show.name} className="w-full" />
+              <Image src={imgUrl(show.poster_path)} alt={show.name} width={288} height={432} className="w-full" />
             </div>
             <div className="flex-1 max-w-3xl">
               <div className="flex flex-wrap items-center gap-3 mb-4 text-sm">
@@ -55,6 +57,7 @@ export default async function TvPage({ params }: Props) {
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                   Start Watching
                 </Link>
+                <FavoriteButton item={{ id: show.id, title: show.name, poster_path: show.poster_path, media_type: "tv" }} />
                 {trailer && (
                   <a href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded border border-white/20 transition-all duration-200">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" /></svg>
@@ -89,7 +92,7 @@ export default async function TvPage({ params }: Props) {
             {show.credits.cast.slice(0, 15).map((person) => (
               <div key={person.id} className="shrink-0 w-24 md:w-28 text-center group">
                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden mx-auto ring-2 ring-white/10 group-hover:ring-red-500/50 transition-all">
-                  <img src={imgUrl(person.profile_path, "w185")} alt={person.name} className="w-full h-full object-cover" />
+                  <Image src={imgUrl(person.profile_path, "w185")} alt={person.name} width={80} height={80} className="w-full h-full object-cover" />
                 </div>
                 <p className="text-xs md:text-sm text-zinc-300 mt-2 truncate font-medium">{person.name}</p>
                 <p className="text-[11px] text-zinc-500 truncate">{person.character}</p>

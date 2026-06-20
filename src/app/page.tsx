@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import MovieCard from "@/components/MovieCard";
 import MovieGrid from "@/components/MovieGrid";
 import TvCard from "@/components/TvCard";
@@ -86,10 +87,13 @@ export default async function Home({ searchParams }: Props) {
       {hero && (
         <section className="relative h-[55vh] min-h-[380px] max-h-[600px]">
           <div className="absolute inset-0 animate-hero">
-            <img
+            <Image
               src={backdropUrl(hero.backdrop_path || hero.poster_path)}
               alt=""
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent" />

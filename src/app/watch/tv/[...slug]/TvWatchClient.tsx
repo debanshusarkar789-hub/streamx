@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { useLandscapeLock } from "@/lib/useLandscapeLock";
+import { addToContinueWatching } from "@/lib/continueWatching";
 
 interface EpisodeData {
   episodeNumber: number;
@@ -24,6 +27,7 @@ interface Props {
   episodeTitle: string;
   backdropSrc: string;
   posterSrc: string;
+  posterPath: string | null;
   nhdUrl: string;
   vixsrcUrl: string;
   vidfastUrl: string;
@@ -48,10 +52,22 @@ const servers: Server[] = [
 
 const STILL_BASE = "https://image.tmdb.org/t/p/w342";
 
-export default function TvWatchClient({ showName, episodeTitle, backdropSrc, posterSrc, nhdUrl, vixsrcUrl, vidfastUrl, showId, season, episode, seasons, currentSeasonEpisodes }: Props) {
+export default function TvWatchClient({ showName, episodeTitle, backdropSrc, posterSrc, posterPath, nhdUrl, vixsrcUrl, vidfastUrl, showId, season, episode, seasons, currentSeasonEpisodes }: Props) {
   const [showWarning, setShowWarning] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
+
+  useLandscapeLock();
+
+  useEffect(() => {
+    addToContinueWatching({
+      id: showId,
+      title: `${showName} — S${season}:E${episode}`,
+      poster_path: posterPath,
+      backdrop_path: backdropSrc.split("/original").pop() || null,
+    });
+  }, [showId, showName, season, episode, posterPath, backdropSrc]);
+
   const [pickerOpen, setPickerOpen] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState(season);
   const [episodes, setEpisodes] = useState<EpisodeData[]>(currentSeasonEpisodes);
@@ -142,7 +158,7 @@ export default function TvWatchClient({ showName, episodeTitle, backdropSrc, pos
             <iframe key={currentUrl} src={currentUrl} className="w-full h-full" allowFullScreen allow="autoplay; fullscreen" onLoad={() => setLoaded(true)} />
             {!loaded && (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80">
-                <img src={posterSrc} alt={showName} className="absolute inset-0 w-full h-full object-cover opacity-30" />
+                <Image src={posterSrc} alt={showName} fill className="object-cover opacity-30" />
                 <div className="relative flex flex-col items-center gap-2">
                   <div className="w-7 h-7 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin" />
                   <span className="text-zinc-400 text-[11px]">Loading from {current.name}...</span>
@@ -204,9 +220,9 @@ export default function TvWatchClient({ showName, episodeTitle, backdropSrc, pos
                         onClick={() => { setPickerOpen(false); setLoaded(false); }}
                         className={`flex gap-3 md:gap-4 p-2.5 rounded-xl transition ${active ? "bg-red-600/15 ring-1 ring-red-500/40" : "hover:bg-white/5"}`}
                       >
-                        <div className="w-28 md:w-36 aspect-video shrink-0 rounded-lg overflow-hidden bg-zinc-800">
+                        <div className="w-28 md:w-36 aspect-video shrink-0 rounded-lg overflow-hidden bg-zinc-800 relative">
                           {ep.stillPath ? (
-                            <img src={`${STILL_BASE}${ep.stillPath}`} alt={ep.name} className="w-full h-full object-cover" loading="lazy" />
+                            <Image src={`${STILL_BASE}${ep.stillPath}`} alt={ep.name} fill className="object-cover" sizes="150px" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-zinc-700">
                               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>

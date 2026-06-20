@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useState, useEffect, useRef } from "react";
 
 interface SearchResult {
   id: number;
@@ -19,7 +19,7 @@ export default function SearchDropdown({ onClose }: { onClose: () => void }) {
   const [selectedIdx, setSelectedIdx] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const router = useRouter();
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -27,31 +27,32 @@ export default function SearchDropdown({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
+    if (abortRef.current) abortRef.current.abort();
     const q = query.trim();
     if (q.length < 2) { setResults([]); setLoading(false); return; }
     setLoading(true);
     timerRef.current = setTimeout(async () => {
+      const controller = new AbortController();
+      abortRef.current = controller;
       try {
         const [movieRes, tvRes] = await Promise.all([
-          fetch(`/api/tmdb/search/movie?query=${encodeURIComponent(q)}&page=1`),
-          fetch(`/api/tmdb/search/tv?query=${encodeURIComponent(q)}&page=1`),
+          fetch(`/api/tmdb/search/movie?query=${encodeURIComponent(q)}&page=1`, { signal: controller.signal }),
+          fetch(`/api/tmdb/search/tv?query=${encodeURIComponent(q)}&page=1`, { signal: controller.signal }),
         ]);
-        const movieData = movieRes.ok ? await movieRes.json() : { results: [] };
-        const tvData = tvRes.ok ? await tvRes.json() : { results: [] };
-
+        const [movieData, tvData] = await Promise.all([
+          movieRes.ok ? movieRes.json() : { results: [] },
+          tvRes.ok ? tvRes.json() : { results: [] },
+        ]);
         const movieResults: SearchResult[] = (movieData.results || []).slice(0, 4).map((m: any) => ({
           id: m.id, title: m.title, year: m.release_date?.split("-")[0] || "", poster_path: m.poster_path, media_type: "movie" as const,
         }));
         const tvResults: SearchResult[] = (tvData.results || []).slice(0, 4).map((t: any) => ({
           id: t.id, title: t.name, year: t.first_air_date?.split("-")[0] || "", poster_path: t.poster_path, media_type: "tv" as const,
         }));
-
         const merged = [...movieResults, ...tvResults].sort(() => Math.random() - 0.5).slice(0, 8);
         setResults(merged);
         setSelectedIdx(-1);
-      } catch {
-        setResults([]);
-      }
+      } catch { if (!controller.signal.aborted) setResults([]); }
       setLoading(false);
     }, 300);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
@@ -64,10 +65,10 @@ export default function SearchDropdown({ onClose }: { onClose: () => void }) {
       e.preventDefault();
       if (selectedIdx >= 0 && results[selectedIdx]) {
         const r = results[selectedIdx];
-        router.push(r.media_type === "tv" ? `/tv/${r.id}` : `/movie/${r.id}`);
+        window.location.href = r.media_type === "tv" ? `/tv/${r.id}` : `/movie/${r.id}`;
         onClose();
       } else if (query.trim()) {
-        router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+        window.location.href = `/search?q=${encodeURIComponent(query.trim())}`;
         onClose();
       }
     } else if (e.key === "Escape") { onClose(); }
@@ -97,9 +98,9 @@ export default function SearchDropdown({ onClose }: { onClose: () => void }) {
                 onClick={onClose}
                 className={`flex items-center gap-3 px-3 py-2.5 transition ${i === selectedIdx ? "bg-red-600/20 text-white" : "text-zinc-300 hover:bg-white/5"}`}
               >
-                <div className="w-9 h-13.5 shrink-0 rounded overflow-hidden bg-zinc-800">
+                <div className="w-9 h-13.5 shrink-0 rounded overflow-hidden bg-zinc-800 relative">
                   {r.poster_path ? (
-                    <img src={`https://image.tmdb.org/t/p/w92${r.poster_path}`} alt="" className="w-full h-full object-cover" />
+                    <Image src={`https://image.tmdb.org/t/p/w92${r.poster_path}`} alt="" fill className="object-cover" sizes="36px" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-zinc-600 text-xs">N/A</div>
                   )}
@@ -117,11 +118,7 @@ export default function SearchDropdown({ onClose }: { onClose: () => void }) {
             ))
           )}
           {!loading && query.trim().length >= 2 && (
-            <Link
-              href={`/search?q=${encodeURIComponent(query.trim())}`}
-              onClick={onClose}
-              className="block text-center text-xs text-zinc-500 hover:text-white py-2.5 border-t border-zinc-800 transition"
-            >
+            <Link href={`/search?q=${encodeURIComponent(query.trim())}`} onClick={onClose} className="block text-center text-xs text-zinc-500 hover:text-white py-2.5 border-t border-zinc-800 transition">
               View all results &rarr;
             </Link>
           )}

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getMovie } from "@/lib/tmdb";
+import { getMovie, imgUrl, backdropUrl } from "@/lib/tmdb";
 import { getMovieEmbedUrl, getVixsrcMovieUrl, getVidfastMovieUrl } from "@/lib/embed";
 import WatchClient from "./WatchClient";
 
@@ -15,8 +15,9 @@ export default async function WatchPage({ params }: Props) {
   return (
     <WatchClient
       movieTitle={movie.title}
-      backdropSrc={`https://image.tmdb.org/t/p/original${movie.backdrop_path || movie.poster_path}`}
-      posterSrc={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+      backdropSrc={backdropUrl(movie.backdrop_path || movie.poster_path)}
+      posterSrc={imgUrl(movie.poster_path)}
+      posterPath={movie.poster_path}
       nhdUrl={getMovieEmbedUrl(movie.id)}
       vixsrcUrl={getVixsrcMovieUrl(movie.id)}
       vidfastUrl={getVidfastMovieUrl(movie.id)}

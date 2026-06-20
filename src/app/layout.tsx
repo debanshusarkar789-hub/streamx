@@ -27,6 +27,10 @@ const cinzel = Cinzel({
 export const metadata: Metadata = {
   title: "StreamX - Watch Movies & TV Shows",
   description: "Discover trending movies, check streaming availability, and find where to watch your favorite films.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

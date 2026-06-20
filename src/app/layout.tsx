@@ -5,6 +5,7 @@ import { Geist, Geist_Mono, Cinzel } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import SplashScreen from "@/components/SplashScreen";
+import DomainNotice from "@/components/DomainNotice";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,7 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable}`}>
       <body className="bg-black text-zinc-100 min-h-screen flex flex-col antialiased" suppressHydrationWarning>
         <SplashScreen />
+        <DomainNotice />
         <Header />
         <main className="flex-1 pb-16 md:pb-0">{children}</main>
         <footer className="border-t border-zinc-900 py-8 px-4 hidden md:block">

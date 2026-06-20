@@ -4,6 +4,8 @@ import Image from "next/image";
 import MovieCard from "@/components/MovieCard";
 import { getMoviesByProvider, getWatchProviders, imgUrl } from "@/lib/tmdb";
 
+export const runtime = "edge";
+
 interface Props {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ name?: string; page?: string }>;

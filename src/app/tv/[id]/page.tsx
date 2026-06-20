@@ -7,6 +7,8 @@ import TvEpisodeBrowser from "@/components/TvEpisodeBrowser";
 import FavoriteButton from "@/components/FavoriteButton";
 import type { TvDetails } from "@/lib/types";
 
+export const runtime = "edge";
+
 interface Props {
   params: Promise<{ id: string }>;
 }

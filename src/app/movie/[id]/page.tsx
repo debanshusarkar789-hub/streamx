@@ -7,6 +7,8 @@ import ProviderBadge from "@/components/ProviderBadge";
 import FavoriteButton from "@/components/FavoriteButton";
 import type { MovieDetails } from "@/lib/types";
 
+export const runtime = "edge";
+
 interface Props {
   params: Promise<{ id: string }>;
 }

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 const TMDB_BASE = "https://api.themoviedb.org/3";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string[] }> }) {

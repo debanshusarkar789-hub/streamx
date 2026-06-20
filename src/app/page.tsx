@@ -8,6 +8,8 @@ import ProviderRow from "@/components/ProviderRow";
 import ContinueWatchingRow from "@/components/ContinueWatchingRow";
 import { getTrending, getPopular, getNowPlaying, getTopRated, getUpcoming, getWatchProviders, backdropUrl, getTrendingTv, getPopularTv, getOnTheAir, getTopRatedTv } from "@/lib/tmdb";
 
+export const runtime = "edge";
+
 interface Props {
   searchParams: Promise<{ category?: string }>;
 }

@@ -14,7 +14,7 @@ export default function SplashScreen() {
     const timer = setTimeout(() => {
       setShow(false);
       sessionStorage.setItem("streamx_splash_seen", "1");
-    }, 10000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 

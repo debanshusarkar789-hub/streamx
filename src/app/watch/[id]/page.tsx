@@ -3,6 +3,8 @@ import { getMovie, imgUrl, backdropUrl } from "@/lib/tmdb";
 import { getMovieEmbedUrl, getVixsrcMovieUrl, getVidfastMovieUrl } from "@/lib/embed";
 import WatchClient from "./WatchClient";
 
+export const runtime = "edge";
+
 interface Props {
   params: Promise<{ id: string }>;
 }

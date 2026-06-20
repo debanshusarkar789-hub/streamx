@@ -99,7 +99,7 @@ body {
 }
 
 .animate-splash-glow {
-  animation: splashGlow 10s ease-in-out forwards;
+  animation: splashGlow 5s ease-in-out forwards;
 }
 
 

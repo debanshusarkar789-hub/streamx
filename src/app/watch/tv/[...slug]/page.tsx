@@ -3,6 +3,8 @@ import { getTvShow, getTvSeasonEpisodes, imgUrl, backdropUrl } from "@/lib/tmdb"
 import { getTvEmbedUrl, getVixsrcTvUrl, getVidfastTvUrl } from "@/lib/embed";
 import TvWatchClient from "./TvWatchClient";
 
+export const runtime = "edge";
+
 interface Props {
   params: Promise<{ slug: string[] }>;
 }

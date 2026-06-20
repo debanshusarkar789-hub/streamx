@@ -2,6 +2,8 @@ import MovieCard from "@/components/MovieCard";
 import TvCard from "@/components/TvCard";
 import { searchMovies, searchTv } from "@/lib/tmdb";
 
+export const runtime = "edge";
+
 interface Props {
   searchParams: Promise<{ q?: string; page?: string; type?: string }>;
 }

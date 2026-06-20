@@ -52,6 +52,7 @@ export default function RootLayout({
             </Link>
             <p className="text-xs text-zinc-600 font-bold">&copy; {new Date().getFullYear()} StreamX &mdash; SF Technologies</p>
             <p className="text-[10px] text-zinc-700 font-bold">Powered by SeekForge Technologies &bull; Brought to you by RDX Debanshu</p>
+            <p className="text-[9px] text-zinc-800 font-mono">streamx.edgeone.dev &bull; streamx1.vercel.app</p>
           </div>
         </footer>
       </body>

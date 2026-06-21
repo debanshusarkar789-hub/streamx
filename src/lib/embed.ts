@@ -122,3 +122,13 @@ export function getVidfastMovieUrl(movieId: number): string {
 export function getVidfastTvUrl(tmdbId: number, season: number, episode: number): string {
   return `https://vidfast.pro/tv/${tmdbId}/${season}/${episode}?autoPlay=true&title=true&poster=true&theme=6C63FF&nextButton=true&autoNext=true`;
 }
+
+// ---- VidNest ----
+
+export function getVidnestMovieUrl(movieId: number): string {
+  return `https://vidnest.fun/movie/${movieId}`;
+}
+
+export function getVidnestTvUrl(tmdbId: number, season: number, episode: number): string {
+  return `https://vidnest.fun/tv/${tmdbId}/${season}/${episode}`;
+}

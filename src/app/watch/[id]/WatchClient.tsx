@@ -13,6 +13,7 @@ interface Props {
   nhdUrl: string;
   vixsrcUrl: string;
   vidfastUrl: string;
+  vidnestUrl: string;
   movieId: number;
 }
 
@@ -22,7 +23,7 @@ interface Server {
   badge: string;
 }
 
-export default function WatchClient({ movieTitle, backdropSrc, posterSrc, posterPath, nhdUrl, vixsrcUrl, vidfastUrl, movieId }: Props) {
+export default function WatchClient({ movieTitle, backdropSrc, posterSrc, posterPath, nhdUrl, vixsrcUrl, vidfastUrl, vidnestUrl, movieId }: Props) {
   const [showWarning, setShowWarning] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -39,6 +40,7 @@ export default function WatchClient({ movieTitle, backdropSrc, posterSrc, poster
   }, [movieId, movieTitle, posterPath, backdropSrc]);
 
   const servers: Server[] = [
+    { name: "VidNest", url: vidnestUrl, badge: "VN" },
     { name: "Vixsrc", url: vixsrcUrl, badge: "VX" },
     { name: "NHD", url: nhdUrl, badge: "NHD" },
     { name: "VidFast", url: vidfastUrl, badge: "VF" },

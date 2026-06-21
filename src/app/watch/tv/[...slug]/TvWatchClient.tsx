@@ -31,6 +31,7 @@ interface Props {
   nhdUrl: string;
   vixsrcUrl: string;
   vidfastUrl: string;
+  vidnestUrl: string;
   showId: number;
   season: number;
   episode: number;
@@ -45,6 +46,7 @@ interface Server {
 }
 
 const servers: Server[] = [
+  { name: "VidNest", url: "", badge: "VN" },
   { name: "Vixsrc", url: "", badge: "VX" },
   { name: "NHD", url: "", badge: "NHD" },
   { name: "VidFast", url: "", badge: "VF" },
@@ -52,7 +54,7 @@ const servers: Server[] = [
 
 const STILL_BASE = "https://image.tmdb.org/t/p/w342";
 
-export default function TvWatchClient({ showName, episodeTitle, backdropSrc, posterSrc, posterPath, nhdUrl, vixsrcUrl, vidfastUrl, showId, season, episode, seasons, currentSeasonEpisodes }: Props) {
+export default function TvWatchClient({ showName, episodeTitle, backdropSrc, posterSrc, posterPath, nhdUrl, vixsrcUrl, vidfastUrl, vidnestUrl, showId, season, episode, seasons, currentSeasonEpisodes }: Props) {
   const [showWarning, setShowWarning] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -73,7 +75,7 @@ export default function TvWatchClient({ showName, episodeTitle, backdropSrc, pos
   const [episodes, setEpisodes] = useState<EpisodeData[]>(currentSeasonEpisodes);
   const [loadingEpisodes, setLoadingEpisodes] = useState(false);
 
-  const serverUrls = [nhdUrl, vixsrcUrl, vidfastUrl];
+  const serverUrls = [vidnestUrl, nhdUrl, vixsrcUrl, vidfastUrl];
   const current = servers[currentIdx];
   const currentUrl = serverUrls[currentIdx];
 

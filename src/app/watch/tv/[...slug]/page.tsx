@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTvShow, getTvSeasonEpisodes, imgUrl, backdropUrl } from "@/lib/tmdb";
-import { getTvEmbedUrl, getVixsrcTvUrl, getVidfastTvUrl } from "@/lib/embed";
+import { getTvEmbedUrl, getVixsrcTvUrl, getVidfastTvUrl, getVidnestTvUrl } from "@/lib/embed";
 import TvWatchClient from "./TvWatchClient";
 
 export const runtime = "edge";
@@ -38,6 +38,7 @@ export default async function TvWatchPage({ params }: Props) {
       nhdUrl={getTvEmbedUrl(show.id, season, episode)}
       vixsrcUrl={getVixsrcTvUrl(show.id, season, episode)}
       vidfastUrl={getVidfastTvUrl(show.id, season, episode)}
+      vidnestUrl={getVidnestTvUrl(show.id, season, episode)}
       showId={show.id}
       season={season}
       episode={episode}
